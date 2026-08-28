@@ -187,5 +187,14 @@ const errorDatabase = [
         causas: ["Es el mensaje de error más genérico de Nintendo. Ocurre cuando un juego requiere un firmware mayor al que tienes, faltan sigpatches, hay un mod incompatible (ej. mods de Smash Bros o Zelda), o los datos del juego están corruptos."],
         solucion: "1. Actualiza tus parches de firmas (sigpatches).\\n2. Comprueba si el juego requiere un firmware de consola más alto del que tienes instalado.\\n3. Si tienes mods instalados (en 'atmosphere/contents/[TitleID]'), bórralos temporalmente para descartar conflictos.\\n4. Verifica datos corruptos desde las opciones de la consola.",
         fuente: "Nintendo / Comunidad"
+    },
+    {
+        codigo: "2168-0002 (0x4a8)",
+        programa: "0100000000000023 (AM)",
+        titulo: "Crasheo del Application Manager",
+        alias: ["error 0100000000000023", "0x4a8", "error al abrir juego sysmodule"],
+        causas: ["El gestor de aplicaciones (Application Manager) de la consola se ha bloqueado. Casi siempre ocurre por culpa de un sysmodule en segundo plano que está desactualizado (como sys-clk, sys-botbase, SaltyNX, etc.) o un tema incompatible."],
+        solucion: "1. Conecta tu tarjeta SD al PC y ve a la ruta 'atmosphere/contents/'.\\n2. Renombra la carpeta 'contents' a 'contents_bak' para desactivar todos los mods temporalmente.\\n3. Si la consola arranca y funciona bien, el problema era uno de esos sysmodules. Elimínalos o descárgalos actualizados para tu firmware.",
+        fuente: "GitHub Issues / Reddit"
     }
 ];
