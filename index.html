@@ -7,17 +7,17 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 min-h-screen font-sans">
-    <div class="container mx-auto px-4 py-8 max-w-3xl">
+    <div class="container mx-auto px-4 py-8 max-w-4xl">
         <header class="text-center mb-8">
             <h1 class="text-4xl font-bold text-red-600 mb-2">Switch Error Fixer</h1>
-            <p class="text-gray-600">Encuentra la solución a los errores más comunes de Atmosphère y la scene de Switch.</p>
+            <p class="text-gray-600">Base de datos de soluciones de la scene (Atmosphère, Hekate, etc.)</p>
         </header>
 
         <div class="bg-white rounded-lg shadow-md p-6 mb-8">
             <div class="relative">
                 <input type="text" id="searchInput" 
                     class="w-full text-lg p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" 
-                    placeholder="Ej. 2002-4364, 010000000000000C, tema, pantalla negra..."
+                    placeholder="Busca un código (ej. 2002-4364), programa (0100...bd00) o problema (pantalla negra)..."
                     onkeyup="searchErrors()">
                 <div class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
                     <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
@@ -35,42 +35,79 @@
     </div>
 
     <script>
-        // Esta es la "base de datos" simulada. ¡Aquí es donde iríamos añadiendo más errores!
+        // Base de datos de errores ampliada
         const errorDatabase = [
             {
                 codigo: "2002-4364",
                 programa: "010000000000000C",
                 titulo: "Crash de Atmosphere durante el arranque",
+                alias: ["pantallazo al encender", "atmosphere no arranca", "error en el logo"],
                 causas: ["Temas personalizados incompatibles con la nueva versión", "microSD en exFAT corrupta", "Datos de guardado corruptos"],
-                solucion: "1. Si actualizaste recientemente, conecta la SD al PC, ve a 'atmosphere/contents' y borra la carpeta '0100000000001000' (Temas).\\n2. Comprueba si tu SD tiene errores (preferible usar FAT32).\\n3. Recrea la emuMMC si el fallo persiste."
+                solucion: "1. Si actualizaste recientemente, conecta la SD al PC, ve a 'atmosphere/contents' y borra la carpeta '0100000000001000' (Temas).\\n2. Comprueba si tu SD tiene errores (preferible usar FAT32).\\n3. Recrea la emuMMC si el fallo persiste.",
+                fuente: "Reddit / Comunidad"
             },
             {
                 codigo: "2002-1002",
                 programa: "Varios (al iniciar juegos)",
                 titulo: "Error de Tarjeta SD / Datos Corruptos en Juegos",
+                alias: ["juego no abre", "datos dañados", "no me instalan los nsp"],
                 causas: ["Partición de la emuNAND corrupta", "Juego mal instalado o archivos dañados", "Tarjeta microSD genérica/falsa o formateada en exFAT"],
-                solucion: "1. Ve a Configuración de la consola -> Gestión de datos -> Programas, selecciona el juego que falla y dale a 'Comprobar si hay datos dañados'.\\n2. Si el error solo ocurre al instalar juegos nuevos o actualizar, es muy probable que tu SD sea falsa o el formato exFAT se haya corrompido. Haz un backup y formatea a FAT32.\\n3. Borra el juego y vuélvelo a instalar desde cero (preferiblemente a través de cable USB/DBI)."
+                solucion: "1. Ve a Configuración -> Gestión de datos -> Programas, selecciona el juego y 'Comprobar si hay datos dañados'.\\n2. Si ocurre al instalar juegos nuevos, formatea la SD a FAT32 o comprueba si es falsa (H2testw).\\n3. Borra el juego y vuélvelo a instalar desde cero (DBI).",
+                fuente: "GBATemp / Reddit"
             },
             {
-                codigo: "2168-0002",
-                programa: "0100000000001000",
-                titulo: "Error al abrir Homebrew (Applet Mode)",
-                causas: ["Intentar abrir una app pesada desde el Álbum", "Homebrew desactualizado"],
-                solucion: "Abre el Homebrew Launcher manteniendo pulsado el botón 'R' mientras abres cualquier juego que tengas instalado. Esto dará acceso a toda la RAM de la consola."
+                codigo: "std::abort() (0xffe)",
+                programa: "010000000000bd00",
+                titulo: "Módulo Mission Control Obsoleto",
+                alias: ["fatal error occurred", "mando bluetooth", "crash al iniciar"],
+                causas: ["El módulo Bluetooth (Mission Control) está desactualizado al subir la Switch a un nuevo firmware masivo."],
+                solucion: "Ve a la carpeta 'atmosphere/contents/' en tu tarjeta SD y borra la carpeta '010000000000bd00'. Luego, descarga la última versión de Mission Control si quieres seguir usándolo.",
+                fuente: "GitHub Issues (Atmosphère)"
             },
             {
-                codigo: "2001-0123",
-                programa: "Varios",
-                titulo: "Falta de sigpatches / Error de firma",
-                causas: ["Los parches de firmas (sigpatches) no están instalados o están desactualizados."],
-                solucion: "Descarga e instala los últimos sigpatches correspondientes a tu versión de Atmosphère y cópialos en la raíz de tu tarjeta SD."
+                codigo: "2144-0001 (0x290)",
+                programa: "Homebrew Menu / Álbum",
+                titulo: "Falta de Memoria en Applet Mode",
+                alias: ["error en el album", "homebrew crashea", "2168-0002"],
+                causas: ["Intento de ejecutar homebrew pesado desde el modo Álbum (Applet Mode) en lugar de usar Title Redirect."],
+                solucion: "No abras el Álbum directamente. En su lugar, mantén presionado el botón 'R' del mando derecho mientras inicias cualquier juego que tengas instalado en la consola. Esto abrirá el Homebrew Menu con acceso a toda la RAM.",
+                fuente: "GBATemp & Reddit"
             },
             {
-                codigo: "2162-0002",
-                programa: "010000000000002B",
-                titulo: "Crasheo por Sysmodule incompatible",
-                causas: ["Un módulo en segundo plano (ej. SysDVR, MissionControl, Tesla) no es compatible con tu versión actual de Atmosphère."],
-                solucion: "Ve a la carpeta 'atmosphere/contents' en tu SD y borra la carpeta correspondiente al módulo que falla (el código de programa te lo indicará, ej. 010000000000002B). También puedes actualizar el sysmodule."
+                codigo: "2002-3005",
+                programa: "Boot / Arranque",
+                titulo: "PRODINFO corrupto o Downgrade incorrecto",
+                alias: ["no pasa de hekate", "emunand rota"],
+                causas: ["Degradación (downgrade) de firmware incorrecta o corrupción en los archivos del sistema PRODINFO de la emuNAND."],
+                solucion: "Debes reconstruir la emuMMC desde cero o restaurar una copia limpia de la NAND que tuvieras guardada previamente mediante Hekate.",
+                fuente: "GBATemp"
+            },
+            {
+                codigo: "Error Genérico",
+                programa: "0100000000000025",
+                titulo: "Restos Antiguos en Kernel/Boot",
+                alias: ["pantalla negra despues de payload", "no carga atmosphere"],
+                causas: ["Incompatibilidad crítica del gestor de arranque al arrancar emuMMC debido a restos de archivos antiguos."],
+                solucion: "Realiza una instalación completamente limpia: borra las carpetas 'atmosphere' y 'bootloader' de tu SD y pon las versiones más recientes. (No sobreescribas, borra primero).",
+                fuente: "GBATemp"
+            },
+            {
+                codigo: "Pantalla Negra",
+                programa: "Sysnand / Emunand",
+                titulo: "Conflicto KIP / Lector SD",
+                alias: ["no enciende", "se queda negro tras el logo", "no arranca"],
+                causas: ["Conflicto con módulos KIP obsoletos (como el viejo fs_mitm.kip) o corrupción del lector de tarjetas SD de la consola."],
+                solucion: "Revisa y limpia la carpeta 'atmosphere/kips/'. Si está vacía, prueba la estabilidad con otra tarjeta MicroSD formateada en FAT32 para descartar fallo de hardware del lector.",
+                fuente: "ElOtroLado & Reddit"
+            },
+            {
+                codigo: "Error de lectura",
+                programa: "010041544D530000",
+                titulo: "Rutas incorrectas en emummc.ini",
+                alias: ["path config error", "no detecta la emunand"],
+                causas: ["Error de sintaxis en las rutas del archivo de configuración de la emuMMC (uso de barras invertidas \\\\ en vez de /)."],
+                solucion: "Abre el archivo 'emummc/emummc.ini' con un bloc de notas y corrige la ruta para que use barras normales (ejemplo: /emummc/Nintendo_emu en lugar de \\emummc\\Nintendo_emu).",
+                fuente: "GitHub Issues (Atmosphère)"
             }
         ];
 
@@ -91,7 +128,6 @@
                 const card = document.createElement('div');
                 card.className = 'bg-white rounded-lg shadow border-l-4 border-red-500 overflow-hidden';
                 
-                // Formatear solución con saltos de línea
                 const solucionHtml = error.solucion.split('\\n').map(line => `<p class="mb-1">${line}</p>`).join('');
                 
                 card.innerHTML = `
@@ -100,7 +136,11 @@
                             <h2 class="text-xl font-bold text-gray-800">${error.titulo}</h2>
                             <span class="bg-red-100 text-red-800 text-sm font-bold px-2 py-1 rounded mt-2 sm:mt-0 whitespace-nowrap">${error.codigo}</span>
                         </div>
-                        ${error.programa !== "Varios" ? `<p class="text-xs text-gray-500 mb-4 font-mono bg-gray-100 inline-block px-2 py-1 rounded">Program: ${error.programa}</p>` : ''}
+                        
+                        <div class="flex items-center gap-2 mb-4">
+                            ${error.programa !== "Varios" ? `<span class="text-xs text-gray-600 bg-gray-100 px-2 py-1 rounded font-mono border">Prog: ${error.programa}</span>` : ''}
+                            <span class="text-xs text-blue-600 bg-blue-50 px-2 py-1 rounded border border-blue-100">📌 ${error.fuente}</span>
+                        </div>
                         
                         <div class="mb-4">
                             <h3 class="font-semibold text-gray-700 mb-1">Causas probables:</h3>
@@ -128,16 +168,21 @@
             const query = document.getElementById('searchInput').value.toLowerCase();
             
             const filtered = errorDatabase.filter(error => {
-                return error.codigo.toLowerCase().includes(query) ||
-                       error.programa.toLowerCase().includes(query) ||
-                       error.titulo.toLowerCase().includes(query) ||
-                       error.causas.some(c => c.toLowerCase().includes(query));
+                const searchString = [
+                    error.codigo,
+                    error.programa,
+                    error.titulo,
+                    error.fuente,
+                    ...(error.alias || []),
+                    ...error.causas
+                ].join(' ').toLowerCase();
+                
+                return searchString.includes(query);
             });
             
             renderResults(filtered);
         }
 
-        // Mostrar todos los resultados por defecto al cargar la página
         renderResults(errorDatabase);
     </script>
 </body>
