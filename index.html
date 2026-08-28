@@ -3,21 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Switch Error Fixer</title>
+    <title>Switch Error Fixer - The Goonies OS</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 min-h-screen font-sans">
-    <div class="container mx-auto px-4 py-8 max-w-4xl">
+<body class="bg-gray-100 min-h-screen font-sans flex flex-col">
+    <!-- Selector de Idioma -->
+    <div class="w-full bg-white shadow-sm py-2 px-4 flex justify-end gap-2">
+        <button onclick="setLanguage('es')" class="text-sm font-bold px-2 py-1 rounded hover:bg-gray-200">🇪🇸 ES</button>
+        <button onclick="setLanguage('en')" class="text-sm font-bold px-2 py-1 rounded hover:bg-gray-200">🇬🇧 EN</button>
+        <button onclick="setLanguage('pt')" class="text-sm font-bold px-2 py-1 rounded hover:bg-gray-200">🇵🇹 PT</button>
+    </div>
+
+    <div class="container mx-auto px-4 py-8 max-w-4xl flex-grow">
+        <!-- Cabecera -->
         <header class="text-center mb-8">
-            <h1 class="text-4xl font-bold text-red-600 mb-2">Switch Error Fixer</h1>
-            <p class="text-gray-600">Base de datos de soluciones de la scene (Atmosphère, Hekate, etc.)</p>
+            <h1 class="text-4xl font-bold text-red-600 mb-2" id="ui-title">Switch Error Fixer</h1>
+            <p class="text-gray-600" id="ui-subtitle">Base de datos de soluciones de la scene (Atmosphère, Hekate, etc.)</p>
         </header>
 
+        <!-- Buscador -->
         <div class="bg-white rounded-lg shadow-md p-6 mb-8">
             <div class="relative">
                 <input type="text" id="searchInput" 
                     class="w-full text-lg p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" 
-                    placeholder="Busca un código (ej. 2002-4364), programa (0100...bd00) o problema (pantalla negra)..."
+                    placeholder="Busca un código (ej. 2002-4364), programa o problema..."
                     onkeyup="searchErrors()">
                 <div class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
                     <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
@@ -25,17 +34,132 @@
             </div>
         </div>
 
-        <div id="results" class="space-y-4">
+        <!-- Resultados -->
+        <div id="results" class="space-y-4 mb-12">
             <!-- Los resultados aparecerán aquí -->
         </div>
         
-        <div id="noResults" class="hidden text-center text-gray-500 py-8">
-            No se encontraron errores con esa búsqueda. ¡Asegúrate de escribir el código o palabra clave correctamente!
+        <div id="noResults" class="hidden text-center text-gray-500 py-8" id="ui-noresults">
+            No se encontraron errores con esa búsqueda. ¡Asegúrate de escribir el código correctamente!
+        </div>
+
+        <!-- Formulario para nuevos errores -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-8 border-t-4 border-gray-800">
+            <h3 class="text-xl font-bold text-gray-800 mb-2" id="ui-form-title">¿No has encontrado tu error?</h3>
+            <p class="text-gray-600 mb-4 text-sm" id="ui-form-desc">Rellena el formulario para añadirlo y publicar la solución. Los revisaremos manualmente antes de publicarlos.</p>
+            
+            <form onsubmit="submitNewError(event)" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1" id="ui-form-label-code">Código de Error / Problema</label>
+                    <input type="text" required class="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-gray-400 focus:outline-none" placeholder="Ej. 2168-0002">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1" id="ui-form-label-details">Detalles / Cómo solucionarlo (si lo sabes)</label>
+                    <textarea required rows="3" class="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-gray-400 focus:outline-none" placeholder="Explica qué ocurre..."></textarea>
+                </div>
+                <button type="submit" class="w-full bg-gray-800 text-white font-bold py-2 px-4 rounded hover:bg-gray-900 transition" id="ui-form-btn">
+                    Enviar para revisión
+                </button>
+            </form>
         </div>
     </div>
 
+    <!-- Footer / Donaciones / Créditos -->
+    <footer class="bg-gray-800 text-white py-8 text-center mt-auto">
+        <div class="container mx-auto px-4">
+            <div class="mb-6">
+                <a href="https://www.paypal.com/paypalme/GoodmanBCN" target="_blank" class="inline-flex items-center justify-center px-6 py-3 bg-yellow-400 text-yellow-900 font-bold rounded-full hover:bg-yellow-500 transition shadow-lg transform hover:scale-105" id="ui-coffee-btn">
+                    ☕ ¿Te he ayudado? Invítame a un café
+                </a>
+            </div>
+            <p class="text-gray-400 text-sm" id="ui-footer-text">
+                Base de datos de errores creada por GoodmanBCN para la comunidad <a href="https://t.me/+I1sFwKHScZw1Yzg0" target="_blank" class="text-blue-400 hover:text-blue-300 font-semibold underline">Switch ES - The Goonies OS</a>
+            </p>
+        </div>
+    </footer>
+
     <script src="errores.js"></script>
     <script>
+        let currentLang = 'es';
+
+        const i18n = {
+            es: {
+                title: "Switch Error Fixer",
+                subtitle: "Base de datos de soluciones de la scene (Atmosphère, Hekate, etc.)",
+                placeholder: "Busca un código (ej. 2002-4364), programa o problema...",
+                noResults: "No se encontraron errores con esa búsqueda.",
+                causes: "Causas probables:",
+                solution: "Solución",
+                formTitle: "¿No has encontrado tu error?",
+                formDesc: "Rellena el formulario para añadirlo y publicar la solución. Los revisaremos manualmente antes de publicarlos.",
+                formLabelCode: "Código de Error / Problema",
+                formLabelDetails: "Detalles / Cómo solucionarlo (si lo sabes)",
+                formBtn: "Enviar para revisión",
+                coffeeBtn: "☕ ¿Te he ayudado? Invítame a un café",
+                footerText: "Base de datos de errores creada por GoodmanBCN para la comunidad <a href='https://t.me/+I1sFwKHScZw1Yzg0' target='_blank' class='text-blue-400 hover:text-blue-300 font-semibold underline'>Switch ES - The Goonies OS</a>",
+                alertSuccess: "¡Gracias! Tu reporte ha sido enviado y será revisado manualmente."
+            },
+            en: {
+                title: "Switch Error Fixer",
+                subtitle: "Scene troubleshooting database (Atmosphère, Hekate, etc.)",
+                placeholder: "Search for a code (e.g. 2002-4364), program or issue...",
+                noResults: "No errors found with that search.",
+                causes: "Probable causes:",
+                solution: "Solution",
+                formTitle: "Couldn't find your error?",
+                formDesc: "Fill out the form to add it. Added errors will be manually reviewed before publishing.",
+                formLabelCode: "Error Code / Problem",
+                formLabelDetails: "Details / How to fix it (if you know)",
+                formBtn: "Submit for review",
+                coffeeBtn: "☕ Did I help you? Buy me a coffee",
+                footerText: "Error database created by GoodmanBCN for the <a href='https://t.me/+I1sFwKHScZw1Yzg0' target='_blank' class='text-blue-400 hover:text-blue-300 font-semibold underline'>Switch ES - The Goonies OS</a> community",
+                alertSuccess: "Thank you! Your report has been submitted and will be reviewed manually."
+            },
+            pt: {
+                title: "Switch Error Fixer",
+                subtitle: "Banco de dados de soluções da scene (Atmosphère, Hekate, etc.)",
+                placeholder: "Busque um código (ex. 2002-4364), programa ou problema...",
+                noResults: "Nenhum erro encontrado com essa busca.",
+                causes: "Causas prováveis:",
+                solution: "Solução",
+                formTitle: "Não encontrou seu erro?",
+                formDesc: "Preencha o formulário para adicioná-lo. Os erros adicionados serão revisados manualmente antes da publicação.",
+                formLabelCode: "Código do Erro / Problema",
+                formLabelDetails: "Detalhes / Como consertar (se souber)",
+                formBtn: "Enviar para revisão",
+                coffeeBtn: "☕ Eu te ajudei? Me pague um café",
+                footerText: "Banco de dados de erros criado por GoodmanBCN para a comunidade <a href='https://t.me/+I1sFwKHScZw1Yzg0' target='_blank' class='text-blue-400 hover:text-blue-300 font-semibold underline'>Switch ES - The Goonies OS</a>",
+                alertSuccess: "Obrigado! Seu relato foi enviado e será revisado manualmente."
+            }
+        };
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            document.getElementById('ui-title').innerText = i18n[lang].title;
+            document.getElementById('ui-subtitle').innerText = i18n[lang].subtitle;
+            document.getElementById('searchInput').placeholder = i18n[lang].placeholder;
+            document.getElementById('noResults').innerText = i18n[lang].noResults;
+            
+            document.getElementById('ui-form-title').innerText = i18n[lang].formTitle;
+            document.getElementById('ui-form-desc').innerText = i18n[lang].formDesc;
+            document.getElementById('ui-form-label-code').innerText = i18n[lang].formLabelCode;
+            document.getElementById('ui-form-label-details').innerText = i18n[lang].formLabelDetails;
+            document.getElementById('ui-form-btn').innerText = i18n[lang].formBtn;
+            
+            document.getElementById('ui-coffee-btn').innerText = i18n[lang].coffeeBtn;
+            document.getElementById('ui-footer-text').innerHTML = i18n[lang].footerText;
+            
+            // Volver a renderizar los resultados para actualizar las etiquetas ("Solución", "Causas")
+            searchErrors();
+        }
+
+        function submitNewError(e) {
+            e.preventDefault();
+            // Aquí en un proyecto real se enviaría a una base de datos o API (ej: Formspree)
+            alert(i18n[currentLang].alertSuccess);
+            e.target.reset();
+        }
+
         function renderResults(results) {
             const resultsContainer = document.getElementById('results');
             const noResults = document.getElementById('noResults');
@@ -53,12 +177,17 @@
                 const card = document.createElement('div');
                 card.className = 'bg-white rounded-lg shadow border-l-4 border-red-500 overflow-hidden';
                 
-                const solucionHtml = error.solucion.split('\\n').map(line => `<p class="mb-1">${line}</p>`).join('');
+                // Si en el futuro traduces la DB, buscaría error.solucion_en, si no, usa la de español por defecto
+                const titulo = error[`titulo_${currentLang}`] || error.titulo;
+                const solucion = error[`solucion_${currentLang}`] || error.solucion;
+                const causas = error[`causas_${currentLang}`] || error.causas;
+                
+                const solucionHtml = solucion.split('\\n').map(line => `<p class="mb-1">${line}</p>`).join('');
                 
                 card.innerHTML = `
                     <div class="p-5">
                         <div class="flex flex-col sm:flex-row justify-between items-start mb-2">
-                            <h2 class="text-xl font-bold text-gray-800">${error.titulo}</h2>
+                            <h2 class="text-xl font-bold text-gray-800">${titulo}</h2>
                             <span class="bg-red-100 text-red-800 text-sm font-bold px-2 py-1 rounded mt-2 sm:mt-0 whitespace-nowrap">${error.codigo}</span>
                         </div>
                         
@@ -68,16 +197,16 @@
                         </div>
                         
                         <div class="mb-4">
-                            <h3 class="font-semibold text-gray-700 mb-1">Causas probables:</h3>
+                            <h3 class="font-semibold text-gray-700 mb-1">${i18n[currentLang].causes}</h3>
                             <ul class="list-disc list-inside text-sm text-gray-600 space-y-1">
-                                ${error.causas.map(c => `<li>${c}</li>`).join('')}
+                                ${causas.map(c => `<li>${c}</li>`).join('')}
                             </ul>
                         </div>
                         
                         <div class="bg-green-50 p-4 rounded-md border border-green-200">
                             <h3 class="font-bold text-green-800 mb-2 flex items-center">
                                 <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                Solución
+                                ${i18n[currentLang].solution}
                             </h3>
                             <div class="text-sm text-green-900">
                                 ${solucionHtml}
@@ -108,7 +237,8 @@
             renderResults(filtered);
         }
 
-        renderResults(errorDatabase);
+        // Iniciar en español
+        setLanguage('es');
     </script>
 </body>
 </html>
