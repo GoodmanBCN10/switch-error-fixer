@@ -142,5 +142,50 @@ const errorDatabase = [
         causas: ["El archivo del juego (.nsp/.xci) está incompleto, o estás instalando un juego superior a 4GB en una tarjeta corrupta."],
         solucion: "Vuelve a descargar el archivo del juego desde otra fuente de confianza e instálalo preferiblemente mediante cable USB con DBI (Modo MTP) en lugar de instalarlo copiando a la SD.",
         fuente: "Comunidad Scene"
+    },
+    {
+        codigo: "Failed to parse package3",
+        programa: "Bootloader / Hekate",
+        titulo: "Error al cargar package3 (Atmosphère)",
+        alias: ["error package_3", "package3", "package 3", "no arranca atmosphere"],
+        causas: ["Archivos de Atmosphère desactualizados o faltantes para el firmware actual de la consola.", "Has actualizado Hekate pero se te olvidó actualizar los archivos de Atmosphère en tu tarjeta SD."],
+        solucion: "Debes actualizar Atmosphère. Descarga la última versión oficial (el archivo .zip 'release'), extrae su contenido y cópialo a la raíz de tu tarjeta SD, reemplazando la carpeta 'atmosphere' anterior.",
+        fuente: "GBATemp / Reddit"
+    },
+    {
+        codigo: "Warmboot Error",
+        programa: "Sleep Mode (Modo Espera)",
+        titulo: "Error de Warmboot",
+        alias: ["error warmboot", "crashea al despertar", "failed to mount warmboot", "pantalla negra suspension"],
+        causas: ["Incompatibilidad de firmware al intentar despertar la consola. Suele pasar en consolas Mariko o al hacer downgrades (bajar de versión) sin quemar efuses, haciendo que el firmware del warmboot no coincida."],
+        solucion: "Generalmente se soluciona asegurándote de usar la versión correcta de Hekate y Atmosphère para tu firmware, o reparando/reinstalando el firmware de la consola limpiamente mediante Daybreak.",
+        fuente: "GitHub Issues (SciresM)"
+    },
+    {
+        codigo: "Failed to init emuMMC",
+        programa: "Hekate / emuMMC",
+        titulo: "Fallo al iniciar la partición emuMMC",
+        alias: ["error emummc", "no encuentra emunand", "forced but not enabled", "pantalla roja hekate"],
+        causas: ["La partición oculta de la emuNAND en la tarjeta SD se ha corrompido, tu SD está muriendo/es falsa, o has cambiado de tarjeta copiando y pegando mal (las particiones ocultas no se copian así)."],
+        solucion: "1. Ve a Hekate -> emuMMC -> Migrate y fíjate si te la detecta para poder arreglarla.\\n2. Revisa que el archivo 'emummc/emummc.ini' apunte al sector correcto de tu SD.\\n3. Si la partición está corrupta sin arreglo, tendrás que extraer tus partidas guardadas (con software como NxNandManager en PC) y crear una emuMMC desde cero.",
+        fuente: "ElOtroLado / Scene"
+    },
+    {
+        codigo: "No main boot entries found",
+        programa: "Hekate (hekate_ipl.ini)",
+        titulo: "Falta configuración de arranque (hekate_ipl.ini)",
+        alias: ["error hekate_ipl", "no me salen los botones en hekate", "boot entries", "missing ipl"],
+        causas: ["Hekate ha arrancado correctamente (el menú táctil), pero no sabe qué hacer porque le falta el archivo de texto que le dice dónde está y cómo cargar Atmosphère."],
+        solucion: "Debes crear (o descargar de un pack confiable) un archivo llamado 'hekate_ipl.ini' y colocarlo dentro de la carpeta 'bootloader' de tu SD. Ese archivo contiene los botones que te aparecen en el menú 'Launch' para arrancar sysNAND o emuNAND.",
+        fuente: "GitHub / GBATemp"
+    },
+    {
+        codigo: "The software was closed",
+        programa: "Horizon OS / Juegos",
+        titulo: "Se ha cerrado el programa a causa de un error",
+        alias: ["se ha cerrado el programa", "juego se cierra solo", "software closed error", "error generico juego"],
+        causas: ["Es el mensaje de error más genérico de Nintendo. Ocurre cuando un juego requiere un firmware mayor al que tienes, faltan sigpatches, hay un mod incompatible (ej. mods de Smash Bros o Zelda), o los datos del juego están corruptos."],
+        solucion: "1. Actualiza tus parches de firmas (sigpatches).\\n2. Comprueba si el juego requiere un firmware de consola más alto del que tienes instalado.\\n3. Si tienes mods instalados (en 'atmosphere/contents/[TitleID]'), bórralos temporalmente para descartar conflictos.\\n4. Verifica datos corruptos desde las opciones de la consola.",
+        fuente: "Nintendo / Comunidad"
     }
 ];
