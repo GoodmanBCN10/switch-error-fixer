@@ -343,5 +343,20 @@ const errorDatabase = [
         solucion_en: "1. Check your SD on a PC to fix file system errors.\\n2. If you have a clean NAND backup, restore it via Hekate.\\n3. If unfixable, extract saves with NxNandManager and recreate emuMMC from scratch.",
         solucion_pt: "1. Verifique seu SD no PC para corrigir erros de sistema de arquivos.\\n2. Se tiver um backup limpo da NAND, restaure pelo Hekate.\\n3. Se não tiver conserto, extraia seus saves com NxNandManager e recrie a emuMMC do zero.",
         fuente: "GitHub Issues (Atmosphère)"
+    },
+    {
+        codigo: "Failed to identify FS!",
+        programa: "Fusée / Boot",
+        titulo: "Incompatibilidad de payload (Fusée)",
+        titulo_en: "Payload mismatch (Fusée)",
+        titulo_pt: "Incompatibilidade de payload (Fusée)",
+        alias: ["fatal error fusee", "identify fs", "crash al inyectar payload"],
+        causas: ["Hay un conflicto de versiones. Estás inyectando un payload (fusee.bin) antiguo pero tienes una versión nueva de Atmosphère en la SD, o viceversa."],
+        causas_en: ["Version mismatch. You are injecting an outdated payload (fusee.bin) but have a newer version of Atmosphere on the SD card, or vice versa."],
+        causas_pt: ["Conflito de versões. Você está injetando um payload (fusee.bin) antigo, mas tem uma nova versão do Atmosphère no SD, ou vice-versa."],
+        solucion: "1. Descarga el archivo 'fusee.bin' de la misma versión oficial de Atmosphère que tienes en tu SD.\\n2. Si usas TegraRcmGUI, un payload.bin en Hekate o un inyector portátil (RCM Loader), asegúrate de actualizar el archivo allí también.",
+        solucion_en: "1. Download the 'fusee.bin' file that matches the Atmosphere version on your SD card.\\n2. If using TegraRcmGUI, a payload.bin in Hekate, or an RCM Loader dongle, make sure to update the payload file there too.",
+        solucion_pt: "1. Baixe o arquivo 'fusee.bin' que corresponde à versão do Atmosphère no seu SD.\\n2. Se usar TegraRcmGUI, Hekate ou um injetor portátil, certifique-se de atualizar o arquivo payload lá também.",
+        fuente: "Comunidad Scene"
     }
 ];
