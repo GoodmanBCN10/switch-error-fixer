@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Switch Error Fixer - The Goonies OS</title>
+    <title>Switch Error Fixer</title>
     
     <!-- Etiquetas para compartir el enlace (Open Graph) -->
-    <meta property="og:title" content="Switch Error Fixer - The Goonies OS">
+    <meta property="og:title" content="Switch Error Fixer">
     <meta property="og:description" content="Encuentra la solución a los errores más comunes de Atmosphère, Hekate y la scene de Nintendo Switch.">
     <meta property="og:url" content="https://goodmanbcn10.github.io/switch-error-fixer/">
     <meta property="og:image" content="https://goodmanbcn10.github.io/switch-error-fixer/portada.jpg">
@@ -126,7 +126,7 @@
         </div>
     </footer>
 
-    <script src="errores.js"></script>
+    <script src="errores.js?v=2"></script>
     <script>
         let currentLang = 'es';
 
@@ -297,7 +297,13 @@
         }
 
         function searchErrors() {
-            const query = document.getElementById('searchInput').value.toLowerCase();
+            const query = document.getElementById('searchInput').value.trim().toLowerCase();
+            
+            if (query === '') {
+                document.getElementById('results').innerHTML = '';
+                document.getElementById('noResults').classList.add('hidden');
+                return;
+            }
             
             const filtered = errorDatabase.filter(error => {
                 const searchString = [
