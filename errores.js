@@ -328,5 +328,20 @@ const errorDatabase = [
         solucion_en: "1. Connect SD card to PC and go to 'atmosphere/contents/'.\\n2. Rename the 'contents' folder to 'contents_bak' to disable all mods temporarily.\\n3. If the console boots fine, the issue was one of those sysmodules. Delete them or download updated versions.",
         solucion_pt: "1. Conecte o SD no PC e vá para 'atmosphere/contents/'.\\n2. Renomeie a pasta 'contents' para 'contents_bak' para desativar os mods temporariamente.\\n3. Se o console ligar normalmente, o problema era um desses sysmodules. Apague-os ou baixe versões atualizadas.",
         fuente: "GitHub Issues / Reddit"
+    },
+    {
+        codigo: "std::abort() (0xffe)",
+        programa: "0100000000000005 (FS/bcat)",
+        titulo: "Corrupción crítica de la emuNAND",
+        titulo_en: "Critical emuNAND Corruption",
+        titulo_pt: "Corrupção crítica da emuNAND",
+        alias: ["0100000000000005", "crash al iniciar atmosphere"],
+        causas: ["La partición de la emuNAND está severamente corrompida. Suele ocurrir al apagar mal la consola, quitar la SD en caliente, o por los típicos fallos al usar formato exFAT en la tarjeta."],
+        causas_en: ["The emuNAND partition is severely corrupted. Usually happens when shutting down the console incorrectly, hot-swapping the SD, or using exFAT format."],
+        causas_pt: ["A partição emuNAND está gravemente corrompida. Geralmente ocorre ao desligar o console incorretamente, remover o SD com ele ligado, ou usar formato exFAT."],
+        solucion: "1. Conecta tu SD al PC y pásale el comprobador de errores de Windows.\\n2. Si tienes una copia de seguridad limpia (NAND backup), restáurala con Hekate.\\n3. Si no hay arreglo, tendrás que extraer tus partidas guardadas con NxNandManager y crear la emuMMC de cero.",
+        solucion_en: "1. Check your SD on a PC to fix file system errors.\\n2. If you have a clean NAND backup, restore it via Hekate.\\n3. If unfixable, extract saves with NxNandManager and recreate emuMMC from scratch.",
+        solucion_pt: "1. Verifique seu SD no PC para corrigir erros de sistema de arquivos.\\n2. Se tiver um backup limpo da NAND, restaure pelo Hekate.\\n3. Se não tiver conserto, extraia seus saves com NxNandManager e recrie a emuMMC do zero.",
+        fuente: "GitHub Issues (Atmosphère)"
     }
 ];
